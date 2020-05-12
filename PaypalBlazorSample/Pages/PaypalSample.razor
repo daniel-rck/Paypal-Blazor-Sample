@@ -1,0 +1,30 @@
+﻿@page "/paypalsample"
+@inject IPayPalPlusClient payPalPlusClient
+<button class="btn btn-primary ml-1 px-2" type="button" disabled="@(!hasCreatedPayment)" @onclick="@OnCreatePaymentButtonClicked">
+    Create Payment now!
+</button>
+
+
+@if (hasCreatedPayment)
+{
+    <div id="ppplus">
+    </div>
+}
+
+@code
+{
+    private bool hasCreatedPayment;
+
+    private async Task OnCreatePaymentButtonClicked()
+    {
+        hasCreatedPayment = true;
+        StateHasChanged();
+
+        decimal totalGrossPrice = 0.99M;
+        string bookingDescription = "Booking 00001";
+        string articleDescription = "Article 00001";
+        string internalReference = "Just-for-testing";
+
+        await payPalPlusClient.CreatePaymentAsync(totalGrossPrice, bookingDescription, articleDescription, internalReference);
+    }
+}
